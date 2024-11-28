@@ -2,15 +2,15 @@ import pandas as pd
 import os
 
 # Папки проекта
-DB_FOLDER = os.path.abspath('./db')
-OUTPUT_FOLDER = os.path.abspath('./output')
+DB_FOLDER = os.path.abspath('./db')  # Папка для хранения базы данных
+OUTPUT_FOLDER = os.path.abspath('./output')  # Папка для сохранения экспортированных файлов
 
 # Проверка и создание папок, если они не существуют
-os.makedirs(DB_FOLDER, exist_ok=True)
-os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+os.makedirs(DB_FOLDER, exist_ok=True)  # Создаем папку для базы данных, если она не существует
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)  # Создаем папку для экспортированных файлов, если она не существует
 
 # Путь к файлу базы данных Excel
-DB_PATH = os.path.join(DB_FOLDER, 'schedule.xlsx')
+DB_PATH = os.path.join(DB_FOLDER, 'schedule.xlsx')  # Путь к файлу базы данных расписания
 
 # Функция для создания базы данных в Excel
 def create_excel_db():
@@ -31,13 +31,13 @@ def create_excel_db():
     df = pd.DataFrame(schedule_data)
 
     # Сохранение базы данных в Excel
-    df.to_excel(DB_PATH, index=False, engine='openpyxl')  # Указываем движок 'openpyxl'
+    df.to_excel(DB_PATH, index=False, engine='openpyxl')  # Сохраняем данные в файл Excel, указываем движок 'openpyxl'
     print(f"База данных расписания создана в файле {DB_PATH}")
 
 # Функция для экспорта данных в Excel для указанного уровня (группа, факультет, вуз)
 def export_schedule_to_excel(level, name=None):
     # Чтение базы данных из Excel
-    df = pd.read_excel(DB_PATH, engine='openpyxl')  # Указываем движок 'openpyxl'
+    df = pd.read_excel(DB_PATH, engine='openpyxl')  # Читаем данные из файла Excel с помощью движка 'openpyxl'
 
     # Проверка, что данные загружены правильно
     if df.empty:
@@ -46,15 +46,19 @@ def export_schedule_to_excel(level, name=None):
 
     # Фильтрация данных в зависимости от уровня
     if level == 'группа' and name is not None:
+        # Фильтрация данных по группе
         filtered_data = df[df['имя_группы'] == name]
         output_file = os.path.join(OUTPUT_FOLDER, f"{name}_schedule.xlsx")
     elif level == 'факультет' and name is not None:
+        # Фильтрация данных по факультету
         filtered_data = df[df['факультет'] == name]
         output_file = os.path.join(OUTPUT_FOLDER, f"{name}_faculty_schedule.xlsx")
     elif level == 'вуз' and name is not None:
+        # Фильтрация данных по вузу
         filtered_data = df[df['вуз'] == name]
         output_file = os.path.join(OUTPUT_FOLDER, f"{name}_university_schedule.xlsx")
     else:
+        # Неверный уровень или имя для фильтрации
         print("Неверный уровень или имя для фильтрации.")
         return
 
@@ -63,32 +67,32 @@ def export_schedule_to_excel(level, name=None):
         print(f"Данные для {name} не найдены.")
     else:
         # Сохранение результата в файл Excel
-        filtered_data.to_excel(output_file, index=False, engine='openpyxl')
+        filtered_data.to_excel(output_file, index=False, engine='openpyxl')  # Сохраняем отфильтрованные данные в Excel
         print(f"Расписание для уровня '{level}' сохранено в файл {output_file}")
 
 if __name__ == "__main__":
     # Создание базы данных в Excel
     create_excel_db()
     # Экспорт расписания в Excel для всех уровней
-    """export_schedule_to_excel('группа', 'Группа А')
-    export_schedule_to_excel('группа', 'Группа Б')
-    export_schedule_to_excel('группа', 'Группа В')
-    export_schedule_to_excel('группа', 'Группа Г')
-    export_schedule_to_excel('группа', 'Группа Д')
-    export_schedule_to_excel('факультет', 'Факультет Естественных Наук')
-    export_schedule_to_excel('факультет', 'Факультет Химии')
-    export_schedule_to_excel('факультет', 'Факультет Биологии')
-    export_schedule_to_excel('факультет', 'Факультет Истории')
-    export_schedule_to_excel('факультет', 'Факультет Географии')
-    export_schedule_to_excel('факультет', 'Факультет Литературы')
-    export_schedule_to_excel('факультет', 'Факультет Компьютерных Наук')
-    export_schedule_to_excel('факультет', 'Факультет Спорта')"""
-    export_schedule_to_excel('вуз', 'Университет Естественных Наук')
-    export_schedule_to_excel('вуз', 'Университет Химических Технологий')
-    export_schedule_to_excel('вуз', 'Университет Биологии')
-    export_schedule_to_excel('вуз', 'Университет Географии')
-    export_schedule_to_excel('вуз', 'Университет Литературы')
-    export_schedule_to_excel('вуз', 'Университет Компьютерных Наук')
-    export_schedule_to_excel('вуз', 'Университет Спорта')
+    export_schedule_to_excel('группа', 'Группа А')  # Экспорт расписания для группы А
+    export_schedule_to_excel('группа', 'Группа Б')  # Экспорт расписания для группы Б
+    export_schedule_to_excel('группа', 'Группа В')  # Экспорт расписания для группы В
+    export_schedule_to_excel('группа', 'Группа Г')  # Экспорт расписания для группы Г
+    export_schedule_to_excel('группа', 'Группа Д')  # Экспорт расписания для группы Д
+    export_schedule_to_excel('факультет', 'Факультет Естественных Наук')  # Экспорт расписания для факультета Естественных Наук
+    export_schedule_to_excel('факультет', 'Факультет Химии')  # Экспорт расписания для факультета Химии
+    export_schedule_to_excel('факультет', 'Факультет Биологии')  # Экспорт расписания для факультета Биологии
+    export_schedule_to_excel('факультет', 'Факультет Истории')  # Экспорт расписания для факультета Истории
+    export_schedule_to_excel('факультет', 'Факультет Географии')  # Экспорт расписания для факультета Географии
+    export_schedule_to_excel('факультет', 'Факультет Литературы')  # Экспорт расписания для факультета Литературы
+    export_schedule_to_excel('факультет', 'Факультет Компьютерных Наук')  # Экспорт расписания для факультета Компьютерных Наук
+    export_schedule_to_excel('факультет', 'Факультет Спорта')  # Экспорт расписания для факультета Спорта
+    export_schedule_to_excel('вуз', 'Университет Естественных Наук')  # Экспорт расписания для Университета Естественных Наук
+    export_schedule_to_excel('вуз', 'Университет Химических Технологий')  # Экспорт расписания для Университета Химических Технологий
+    export_schedule_to_excel('вуз', 'Университет Биологии')  # Экспорт расписания для Университета Биологии
+    export_schedule_to_excel('вуз', 'Университет Географии')  # Экспорт расписания для Университета Географии
+    export_schedule_to_excel('вуз', 'Университет Литературы')  # Экспорт расписания для Университета Литературы
+    export_schedule_to_excel('вуз', 'Университет Компьютерных Наук')  # Экспорт расписания для Университета Компьютерных Наук
+    export_schedule_to_excel('вуз', 'Университет Спорта')  # Экспорт расписания для Университета Спорта
 
 
